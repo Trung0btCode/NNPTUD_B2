@@ -1,10 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quản lý sản phẩm</title>
-    <!-- Bootstrap CSS -->
+    <title>Quản lý Posts và Comments</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
@@ -13,510 +12,390 @@
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         body {
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            min-height: 100vh;
-            padding: 40px 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
-        .main-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 15px;
-        }
-        
-        .page-header {
-            text-align: center;
-            margin-bottom: 45px;
-            animation: slideDown 0.6s ease-out;
-        }
-        
-        @keyframes slideDown {
-            from {
-                opacity: 0;
-                transform: translateY(-30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
-        .page-header h1 {
-            font-size: 3rem;
-            font-weight: 800;
-            margin-bottom: 10px;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            letter-spacing: -1px;
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 20px 0;
         }
-        
-        .page-header p {
-            font-size: 1.1rem;
-            color: #666;
-            font-weight: 500;
+
+        .container-main {
+            max-width: 1200px;
+            margin: 0 auto;
         }
-        
-        .search-sort-section {
+
+        .page-header {
             background: white;
             padding: 30px;
             border-radius: 15px;
-            margin-bottom: 35px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.5);
-            backdrop-filter: blur(10px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-bottom: 30px;
+            text-align: center;
         }
-        
-        .search-box {
-            position: relative;
-            margin-bottom: 25px;
-        }
-        
-        .search-box input {
-            border-radius: 12px;
-            padding: 14px 20px 14px 50px;
-            border: 2px solid #e8e8e8;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-            width: 100%;
-            background: #f9f9f9;
-        }
-        
-        .search-box input:focus {
-            border-color: #667eea;
-            background: white;
-            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
-            outline: none;
-        }
-        
-        .search-box i {
-            position: absolute;
-            left: 18px;
-            top: 50%;
-            transform: translateY(-50%);
+
+        .page-header h1 {
             color: #667eea;
-            pointer-events: none;
-            font-size: 1.1rem;
+            margin-bottom: 10px;
+            font-weight: 700;
         }
-        
-        .sort-buttons {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            gap: 12px;
+
+        .page-header p {
+            color: #666;
+            margin: 0;
         }
-        
-        .sort-button {
-            padding: 12px 16px;
-            border: 2px solid #e8e8e8;
+
+        .card-section {
             background: white;
-            border-radius: 10px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            color: #333;
-            font-size: 0.9rem;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            color: #667eea;
+            font-weight: 700;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #667eea;
             display: flex;
             align-items: center;
-            justify-content: center;
-            gap: 8px;
+            gap: 10px;
         }
-        
-        .sort-button:hover {
+
+        .form-label {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .form-control, .form-select {
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 10px 15px;
+            transition: all 0.3s;
+        }
+
+        .form-control:focus, .form-select:focus {
             border-color: #667eea;
-            color: #667eea;
-            background: #f8faff;
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
-            transform: translateY(-2px);
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
         }
-        
-        .sort-button.active {
+
+        .btn-primary-custom {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
             color: white;
-            border-color: transparent;
-            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.35);
+            font-weight: 600;
+            padding: 10px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
         }
-        
-        .table-wrapper {
-            background: white;
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.5);
-            animation: fadeIn 0.6s ease-out;
+
+        .btn-primary-custom:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+            color: white;
+            text-decoration: none;
         }
-        
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
+
+        .btn-sm-custom {
+            padding: 6px 12px;
+            font-size: 12px;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
         }
-        
-        .table {
+
+        .btn-edit {
+            background: #3498db;
+            color: white;
+        }
+
+        .btn-edit:hover {
+            background: #2980b9;
+        }
+
+        .btn-delete {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .btn-delete:hover {
+            background: #c0392b;
+        }
+
+        .btn-restore {
+            background: #27ae60;
+            color: white;
+        }
+
+        .btn-restore:hover {
+            background: #229954;
+        }
+
+        .btn-comment {
+            background: #9b59b6;
+            color: white;
+        }
+
+        .btn-comment:hover {
+            background: #8e44ad;
+        }
+
+        table {
             margin-bottom: 0;
         }
-        
-        .table thead {
+
+        thead {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
         }
-        
-        .table thead th {
-            border: none;
-            padding: 18px 15px;
-            font-weight: 700;
-            text-transform: uppercase;
-            font-size: 0.85rem;
-            letter-spacing: 1px;
-            color: rgba(255, 255, 255, 0.95);
+
+        tbody tr {
+            transition: all 0.3s;
         }
-        
-        .table tbody td {
-            padding: 18px 15px;
-            border-color: #f0f0f0;
-            vertical-align: middle;
-            color: #333;
+
+        tbody tr:hover {
+            background-color: #f0f0f0;
         }
-        
-        .table tbody tr {
-            transition: all 0.3s ease;
-            border-bottom: 1px solid #f0f0f0;
-        }
-        
-        .table tbody tr:hover {
-            background: linear-gradient(135deg, #f8faff 0%, #f0f4ff 100%);
-            box-shadow: inset 0 0 0 1px rgba(102, 126, 234, 0.1);
-        }
-        
-        .table tbody tr:last-child {
-            border-bottom: none;
-        }
-        
-        .product-image {
-            width: 90px;
-            height: 90px;
-            object-fit: cover;
-            border-radius: 10px;
-            border: 2px solid #e8e8e8;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            background: #f9f9f9;
-            display: block;
-        }
-        
-        .product-image:hover {
-            transform: scale(1.12);
-            box-shadow: 0 8px 24px rgba(102, 126, 234, 0.25);
-            border-color: #667eea;
-        }
-        
-        .product-image-error {
-            width: 90px;
-            height: 90px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: linear-gradient(135deg, #f5f7fa 0%, #e9ecef 100%);
-            border-radius: 10px;
-            border: 2px solid #e8e8e8;
+
+        .post-deleted {
+            text-decoration: line-through;
             color: #999;
-            font-size: 1.8rem;
+            opacity: 0.7;
         }
-        
-        .product-name {
-            font-weight: 700;
-            color: #222;
-            font-size: 0.95rem;
-        }
-        
-        .product-category {
-            color: #999;
-            font-size: 0.85rem;
-            text-transform: capitalize;
-            font-weight: 500;
-        }
-        
-        .product-price {
-            font-weight: 800;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            font-size: 1.25rem;
-        }
-        
-        .action-buttons {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-        }
-        
-        .btn-sm {
-            padding: 8px 14px;
-            font-size: 0.8rem;
-            border-radius: 8px;
-            border: none;
-            cursor: pointer;
-            transition: all 0.3s ease;
+
+        .badge-deleted {
+            background: #e74c3c;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 11px;
             font-weight: 600;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 5px;
-            min-width: 38px;
-            height: 38px;
         }
-        
-        .btn-view {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.25);
-        }
-        
-        .btn-view:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.35);
-        }
-        
-        .btn-add {
-            background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
-            color: white;
-            box-shadow: 0 4px 15px rgba(39, 174, 96, 0.25);
-        }
-        
-        .btn-add:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 20px rgba(39, 174, 96, 0.35);
-        }
-        
-        .btn-delete {
-            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
-            color: white;
-            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.25);
-        }
-        
-        .btn-delete:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 20px rgba(231, 76, 60, 0.35);
-        }
-        
-        .loading {
+
+        .no-data {
             text-align: center;
-            padding: 80px 20px;
-            font-size: 1.2rem;
+            padding: 40px;
+            color: #999;
+        }
+
+        .no-data i {
+            font-size: 48px;
+            margin-bottom: 15px;
+            opacity: 0.5;
+        }
+
+        .comment-item {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border-left: 4px solid #667eea;
+        }
+
+        .comment-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .comment-id {
+            font-weight: 700;
             color: #667eea;
         }
-        
-        .loading i {
-            font-size: 3.5rem;
-            margin-bottom: 20px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+
+        .comment-text {
+            color: #333;
+            margin-bottom: 10px;
         }
-        
-        .error {
-            background: white;
-            text-align: center;
-            padding: 80px 20px;
-            font-size: 1.2rem;
-            color: #e74c3c;
-            border-radius: 15px;
-            border: 2px solid #fee;
-        }
-        
-        .error i {
-            font-size: 3.5rem;
-            margin-bottom: 20px;
-            color: #e74c3c;
-        }
-        
-        .no-results {
-            background: white;
-            text-align: center;
-            padding: 80px 20px;
-            border-radius: 15px;
+
+        .comment-postId {
             color: #999;
-            font-size: 1.1rem;
-            border: 2px dashed #e8e8e8;
+            font-size: 12px;
+            margin-bottom: 10px;
         }
-        
-        .modal-backdrop {
-            backdrop-filter: blur(8px);
-            background-color: rgba(0, 0, 0, 0.5);
+
+        .comment-actions {
+            display: flex;
+            gap: 8px;
         }
-        
+
+        .tabs-nav {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .tab-btn {
+            background: none;
+            border: none;
+            padding: 12px 20px;
+            font-weight: 600;
+            color: #999;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+            position: relative;
+            bottom: -2px;
+        }
+
+        .tab-btn.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+        }
+
+        .tab-btn:hover {
+            color: #667eea;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .row-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
         @media (max-width: 768px) {
-            .sort-buttons {
+            .row-form {
                 grid-template-columns: 1fr;
             }
-            
-            .page-header h1 {
-                font-size: 2rem;
-            }
-            
-            .table {
-                font-size: 0.85rem;
-            }
-            
-            .table thead th,
-            .table tbody td {
-                padding: 12px;
-            }
-            
-            .product-image {
-                width: 70px;
-                height: 70px;
-            }
-            
-            .product-image-error {
-                width: 70px;
-                height: 70px;
-            }
-            
-            .action-buttons {
-                gap: 6px;
-            }
-            
-            .btn-sm {
-                padding: 6px 10px;
-                font-size: 0.75rem;
-                min-width: 34px;
-                height: 34px;
+
+            .tabs-nav {
+                flex-wrap: wrap;
             }
         }
     </style>
 </head>
 <body>
-    <div class="main-container">
+    <div class="container-main">
+        <!-- Header -->
         <div class="page-header">
-            <h1><i class="fas fa-cube"></i> Quản Lý Sản Phẩm</h1>
-            <p>💼 Hệ thống quản lý sản phẩm hiện đại với công cụ tìm kiếm và sắp xếp</p>
+            <h1><i class="fas fa-database"></i> Quản lý Posts & Comments</h1>
+            <p>Hệ thống quản lý bài viết và bình luận với xóa mềm</p>
         </div>
-        
-        <div class="search-sort-section">
-            <div class="search-box">
-                <i class="fas fa-search"></i>
-                <input 
-                    type="text" 
-                    id="searchInput" 
-                    class="form-control" 
-                    placeholder="Tìm kiếm theo tên sản phẩm..."
-                    onchange="handleSearch()"
-                    oninput="handleSearch()"
-                >
-            </div>
-            
-            <label style="display: block; margin-bottom: 15px; font-weight: 700; color: #333; font-size: 0.95rem;">⚙️ SẮP XẾP DỮ LIỆU:</label>
-            <div class="sort-buttons">
-                <button class="sort-button" onclick="sortByName('asc')">
-                    <i class="fas fa-arrow-up"></i> Tên (A-Z)
-                </button>
-                <button class="sort-button" onclick="sortByName('desc')">
-                    <i class="fas fa-arrow-down"></i> Tên (Z-A)
-                </button>
-                <button class="sort-button" onclick="sortByPrice('asc')">
-                    <i class="fas fa-arrow-up"></i> Giá (Thấp-Cao)
-                </button>
-                <button class="sort-button" onclick="sortByPrice('desc')">
-                    <i class="fas fa-arrow-down"></i> Giá (Cao-Thấp)
-                </button>
-            </div>
-        </div>
-        
-        <div id="products-container" class="table-wrapper">
-            <div class="loading">
-                <i class="fas fa-spinner fa-spin"></i>
-                <div>Đang tải dữ liệu...</div>
-            </div>
-        </div>
-    </div>
 
-    <!-- Modal xem hình ảnh -->
-    <div class="modal fade" id="imageModal" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered modal-lg">
-            <div class="modal-content" style="background: white; border: none; border-radius: 15px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.3);">
-                <div class="modal-header" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none; padding: 25px;">
-                    <h5 class="modal-title" id="modalTitle" style="color: white; font-weight: 700; font-size: 1.3rem;">🖼️ Hình ảnh sản phẩm</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" style="filter: brightness(0.9);"></button>
-                </div>
-                <div class="modal-body text-center" style="padding: 40px;">
-                    <img id="modalImage" src="" alt="Product Image" style="max-width: 100%; border-radius: 15px; box-shadow: 0 10px 40px rgba(0,0,0,0.15);">
-                </div>
+        <!-- Tabs Navigation -->
+        <div class="card-section">
+            <div class="tabs-nav">
+                <button class="tab-btn active" onclick="switchTab('posts')">
+                    <i class="fas fa-file-alt"></i> Quản lý Posts
+                </button>
+                <button class="tab-btn" onclick="switchTab('comments')">
+                    <i class="fas fa-comments"></i> Quản lý Comments
+                </button>
             </div>
         </div>
-    </div>
 
-    <!-- Modal xem chi tiết sản phẩm -->
-    <div class="modal fade" id="detailModal" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered modal-lg">
-            <div class="modal-content" style="background: white; border: none; border-radius: 15px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.3);">
-                <div class="modal-header" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none; padding: 25px;">
-                    <h5 class="modal-title" style="color: white; font-weight: 700; font-size: 1.3rem;">📋 Chi tiết sản phẩm</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" style="filter: brightness(0.9);"></button>
-                </div>
-                <div class="modal-body" style="padding: 35px;">
-                    <div class="row">
-                        <div class="col-md-5 text-center" style="margin-bottom: 20px;">
-                            <img id="detailImage" src="" alt="Product Image" style="max-width: 100%; border-radius: 15px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); margin-bottom: 15px;">
+        <!-- Posts Tab -->
+        <div id="posts-tab" class="tab-content active">
+            <!-- Form tạo/sửa Post -->
+            <div class="card-section">
+                <h3 class="section-title">
+                    <i class="fas fa-plus-circle"></i>
+                    <span id="form-title">Tạo bài viết mới</span>
+                </h3>
+
+                <form id="postForm">
+                    <div class="row-form">
+                        <div>
+                            <label class="form-label">Tiêu đề</label>
+                            <input type="text" class="form-control" id="postTitle" placeholder="Nhập tiêu đề..." required>
                         </div>
-                        <div class="col-md-7">
-                            <h3 id="detailName" style="color: #222; font-weight: 800; margin-bottom: 15px; font-size: 1.5rem;"></h3>
-                            <div style="margin-bottom: 18px;">
-                                <span style="display: inline-block; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 7px 15px; border-radius: 25px; font-size: 0.85rem; font-weight: 700;" id="detailCategory"></span>
-                            </div>
-                            <div style="margin-bottom: 15px; padding: 16px; background: linear-gradient(135deg, #f8faff 0%, #f0f4ff 100%); border-radius: 12px; border-left: 4px solid #667eea;">
-                                <div style="color: #999; font-size: 0.85rem; margin-bottom: 6px; font-weight: 600;">🆔 ID Sản phẩm</div>
-                                <div style="color: #333; font-weight: 700; font-size: 1.1rem;" id="detailId"></div>
-                            </div>
-                            <div style="margin-bottom: 15px; padding: 16px; background: linear-gradient(135deg, #f8faff 0%, #f0f4ff 100%); border-radius: 12px; border-left: 4px solid #27ae60;">
-                                <div style="color: #999; font-size: 0.85rem; margin-bottom: 6px; font-weight: 600;">💰 Giá bán</div>
-                                <div style="font-size: 2rem; font-weight: 800; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;" id="detailPrice"></div>
-                            </div>
-                            <div style="margin-bottom: 20px; padding: 16px; background: linear-gradient(135deg, #f8faff 0%, #f0f4ff 100%); border-radius: 12px; border-left: 4px solid #667eea;">
-                                <div style="color: #999; font-size: 0.85rem; margin-bottom: 8px; font-weight: 600;">📝 Mô tả</div>
-                                <div style="color: #555; line-height: 1.7; font-size: 0.95rem;" id="detailDescription"></div>
-                            </div>
+                        <div>
+                            <label class="form-label">Lượt xem</label>
+                            <input type="number" class="form-control" id="postViews" placeholder="Nhập số lượt xem..." value="0" required>
                         </div>
                     </div>
+
+                    <div style="margin-top: 20px; display: flex; gap: 10px;">
+                        <button type="submit" class="btn-primary-custom">
+                            <i class="fas fa-save"></i> Lưu
+                        </button>
+                        <button type="reset" class="btn btn-secondary" onclick="resetForm()">
+                            <i class="fas fa-redo"></i> Hủy
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Danh sách Posts -->
+            <div class="card-section">
+                <h3 class="section-title">
+                    <i class="fas fa-list"></i> Danh sách Posts
+                </h3>
+
+                <div id="posts-container">
+                    <div class="no-data">
+                        <i class="fas fa-inbox"></i>
+                        <p>Chưa có bài viết nào</p>
+                    </div>
                 </div>
-                <div class="modal-footer" style="border-top: 1px solid #e8e8e8; padding: 20px 35px; background: #f9f9f9; gap: 10px;">
-                    <button type="button" class="btn" style="background: #e8e8e8; color: #333; border: none; padding: 10px 25px; border-radius: 10px; font-weight: 700; cursor: pointer; transition: all 0.3s;" data-bs-dismiss="modal" onmouseover="this.style.background='#d0d0d0'" onmouseout="this.style.background='#e8e8e8'">Đóng</button>
-                    <button type="button" class="btn" style="background: linear-gradient(135deg, #27ae60 0%, #229954 100%); color: white; border: none; padding: 10px 25px; border-radius: 10px; font-weight: 700; cursor: pointer; transition: all 0.3s; box-shadow: 0 4px 15px rgba(39, 174, 96, 0.25);" id="detailAddBtn" onmouseover="this.style.boxShadow='0 6px 20px rgba(39, 174, 96, 0.35); this.style.transform='translateY(-2px)'" onmouseout="this.style.boxShadow='0 4px 15px rgba(39, 174, 96, 0.25)'; this.style.transform='translateY(0)'">➕ Thêm vào giỏ</button>
+            </div>
+        </div>
+
+        <!-- Comments Tab -->
+        <div id="comments-tab" class="tab-content">
+            <!-- Form tạo/sửa Comment -->
+            <div class="card-section">
+                <h3 class="section-title">
+                    <i class="fas fa-comment-plus"></i>
+                    <span id="comment-form-title">Tạo bình luận mới</span>
+                </h3>
+
+                <form id="commentForm">
+                    <div>
+                        <label class="form-label">Chọn bài viết</label>
+                        <select class="form-select" id="commentPostId" required>
+                            <option value="">-- Chọn bài viết --</option>
+                        </select>
+                    </div>
+
+                    <div style="margin-top: 20px;">
+                        <label class="form-label">Nội dung bình luận</label>
+                        <textarea class="form-control" id="commentText" placeholder="Nhập nội dung bình luận..." rows="4" required></textarea>
+                    </div>
+
+                    <div style="margin-top: 20px; display: flex; gap: 10px;">
+                        <button type="submit" class="btn-primary-custom">
+                            <i class="fas fa-save"></i> Lưu
+                        </button>
+                        <button type="reset" class="btn btn-secondary" onclick="resetCommentForm()">
+                            <i class="fas fa-redo"></i> Hủy
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Danh sách Comments -->
+            <div class="card-section">
+                <h3 class="section-title">
+                    <i class="fas fa-comments"></i> Danh sách Comments
+                </h3>
+
+                <div id="comments-container">
+                    <div class="no-data">
+                        <i class="fas fa-inbox"></i>
+                        <p>Chưa có bình luận nào</p>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Modal xác nhận xóa -->
-    <div class="modal fade" id="deleteModal" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content" style="background: white; border: none; border-radius: 15px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.3);">
-                <div class="modal-header" style="background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%); border: none; padding: 25px;">
-                    <h5 class="modal-title" style="color: white; font-weight: 700; font-size: 1.3rem;">⚠️ Xác nhận xóa</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" style="filter: brightness(0.9);"></button>
-                </div>
-                <div class="modal-body" style="padding: 40px; text-align: center;">
-                    <i class="fas fa-trash-alt" style="font-size: 4rem; color: #e74c3c; margin-bottom: 20px; display: block;"></i>
-                    <div style="font-size: 1.2rem; color: #333; font-weight: 700; margin-bottom: 12px;">Bạn chắc chắn muốn xóa?</div>
-                    <div style="color: #666; font-size: 0.95rem; line-height: 1.6;" id="deleteMessage"></div>
-                </div>
-                <div class="modal-footer" style="border-top: 1px solid #e8e8e8; padding: 20px 35px; background: #f9f9f9; gap: 10px;">
-                    <button type="button" class="btn" style="background: #e8e8e8; color: #333; border: none; padding: 10px 25px; border-radius: 10px; font-weight: 700; cursor: pointer; transition: all 0.3s;" data-bs-dismiss="modal" onmouseover="this.style.background='#d0d0d0'" onmouseout="this.style.background='#e8e8e8'">Hủy</button>
-                    <button type="button" class="btn" style="background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%); color: white; border: none; padding: 10px 25px; border-radius: 10px; font-weight: 700; cursor: pointer; transition: all 0.3s; box-shadow: 0 4px 15px rgba(231, 76, 60, 0.25);" id="confirmDeleteBtn" onmouseover="this.style.boxShadow='0 6px 20px rgba(231, 76, 60, 0.35)'; this.style.transform='translateY(-2px)'" onmouseout="this.style.boxShadow='0 4px 15px rgba(231, 76, 60, 0.25)'; this.style.transform='translateY(0)'">🗑️ Xóa ngay</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="main.js"></script>
 </body>
