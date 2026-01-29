@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý sản phẩm</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            padding: 40px 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .main-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+        
+        .page-header {
+            text-align: center;
+            margin-bottom: 45px;
+            animation: slideDown 0.6s ease-out;
+        }
+        
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .page-header h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -1px;
+        }
+        
+        .page-header p {
+            font-size: 1.1rem;
+            color: #666;
+            font-weight: 500;
+        }
+        
+        .search-sort-section {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 35px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(10px);
+        }
+        
+        .search-box {
+            position: relative;
+            margin-bottom: 25px;
+        }
+        
+        .search-box input {
+            border-radius: 12px;
+            padding: 14px 20px 14px 50px;
+            border: 2px solid #e8e8e8;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            width: 100%;
+            background: #f9f9f9;
+        }
+        
+        .search-box input:focus {
+            border-color: #667eea;
+            background: white;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+            outline: none;
+        }
+        
+        .search-box i {
+            position: absolute;
+            left: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #667eea;
+            pointer-events: none;
+            font-size: 1.1rem;
+        }
+        
+        .sort-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 12px;
+        }
+        
+        .sort-button {
+            padding: 12px 16px;
+            border: 2px solid #e8e8e8;
+            background: white;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            color: #333;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .sort-button:hover {
+            border-color: #667eea;
+            color: #667eea;
+            background: #f8faff;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
+            transform: translateY(-2px);
+        }
+        
+        .sort-button.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-color: transparent;
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.35);
+        }
+        
+        .table-wrapper {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            animation: fadeIn 0.6s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        
+        .table {
+            margin-bottom: 0;
+        }
+        
+        .table thead {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .table thead th {
+            border: none;
+            padding: 18px 15px;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+            color: rgba(255, 255, 255, 0.95);
+        }
+        
+        .table tbody td {
+            padding: 18px 15px;
+            border-color: #f0f0f0;
+            vertical-align: middle;
+            color: #333;
+        }
+        
+        .table tbody tr {
+            transition: all 0.3s ease;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .table tbody tr:hover {
+            background: linear-gradient(135deg, #f8faff 0%, #f0f4ff 100%);
+            box-shadow: inset 0 0 0 1px rgba(102, 126, 234, 0.1);
+        }
+        
+        .table tbody tr:last-child {
+            border-bottom: none;
+        }
+        
+        .product-image {
+            width: 90px;
+            height: 90px;
+            object-fit: cover;
+            border-radius: 10px;
+            border: 2px solid #e8e8e8;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: #f9f9f9;
+            display: block;
+        }
+        
+        .product-image:hover {
+            transform: scale(1.12);
+            box-shadow: 0 8px 24px rgba(102, 126, 234, 0.25);
+            border-color: #667eea;
+        }
+        
+        .product-image-error {
+            width: 90px;
+            height: 90px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e9ecef 100%);
+            border-radius: 10px;
+            border: 2px solid #e8e8e8;
+            color: #999;
+            font-size: 1.8rem;
+        }
+        
+        .product-name {
+            font-weight: 700;
+            color: #222;
+            font-size: 0.95rem;
+        }
+        
+        .product-category {
+            color: #999;
+            font-size: 0.85rem;
+            text-transform: capitalize;
+            font-weight: 500;
+        }
+        
+        .product-price {
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 1.25rem;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        
+        .btn-sm {
+            padding: 8px 14px;
+            font-size: 0.8rem;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            min-width: 38px;
+            height: 38px;
+        }
+        
+        .btn-view {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.25);
+        }
+        
+        .btn-view:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.35);
+        }
+        
+        .btn-add {
+            background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(39, 174, 96, 0.25);
+        }
+        
+        .btn-add:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(39, 174, 96, 0.35);
+        }
+        
+        .btn-delete {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.25);
+        }
+        
+        .btn-delete:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(231, 76, 60, 0.35);
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 80px 20px;
+            font-size: 1.2rem;
+            color: #667eea;
+        }
+        
+        .loading i {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .error {
+            background: white;
+            text-align: center;
+            padding: 80px 20px;
+            font-size: 1.2rem;
+            color: #e74c3c;
+            border-radius: 15px;
+            border: 2px solid #fee;
+        }
+        
+        .error i {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            color: #e74c3c;
+        }
+        
+        .no-results {
+            background: white;
+            text-align: center;
+            padding: 80px 20px;
+            border-radius: 15px;
+            color: #999;
+            font-size: 1.1rem;
+            border: 2px dashed #e8e8e8;
+        }
+        
+        .modal-backdrop {
+            backdrop-filter: blur(8px);
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+        
+        @media (max-width: 768px) {
+            .sort-buttons {
+                grid-template-columns: 1fr;
+            }
+            
+            .page-header h1 {
+                font-size: 2rem;
+            }
+            
+            .table {
+                font-size: 0.85rem;
+            }
+            
+            .table thead th,
+            .table tbody td {
+                padding: 12px;
+            }
+            
+            .product-image {
+                width: 70px;
+                height: 70px;
+            }
+            
+            .product-image-error {
+                width: 70px;
+                height: 70px;
+            }
+            
+            .action-buttons {
+                gap: 6px;
+            }
+            
+            .btn-sm {
+                padding: 6px 10px;
+                font-size: 0.75rem;
+                min-width: 34px;
+                height: 34px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <div class="page-header">
+            <h1><i class="fas fa-cube"></i> Quản Lý Sản Phẩm</h1>
+            <p>💼 Hệ thống quản lý sản phẩm hiện đại với công cụ tìm kiếm và sắp xếp</p>
+        </div>
+        
+        <div class="search-sort-section">
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input 
+                    type="text" 
+                    id="searchInput" 
+                    class="form-control" 
+                    placeholder="Tìm kiếm theo tên sản phẩm..."
+                    onchange="handleSearch()"
+                    oninput="handleSearch()"
+                >
+            </div>
+            
+            <label style="display: block; margin-bottom: 15px; font-weight: 700; color: #333; font-size: 0.95rem;">⚙️ SẮP XẾP DỮ LIỆU:</label>
+            <div class="sort-buttons">
+                <button class="sort-button" onclick="sortByName('asc')">
+                    <i class="fas fa-arrow-up"></i> Tên (A-Z)
+                </button>
+                <button class="sort-button" onclick="sortByName('desc')">
+                    <i class="fas fa-arrow-down"></i> Tên (Z-A)
+                </button>
+                <button class="sort-button" onclick="sortByPrice('asc')">
+                    <i class="fas fa-arrow-up"></i> Giá (Thấp-Cao)
+                </button>
+                <button class="sort-button" onclick="sortByPrice('desc')">
+                    <i class="fas fa-arrow-down"></i> Giá (Cao-Thấp)
+                </button>
+            </div>
+        </div>
+        
+        <div id="products-container" class="table-wrapper">
+            <div class="loading">
+                <i class="fas fa-spinner fa-spin"></i>
+                <div>Đang tải dữ liệu...</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal xem hình ảnh -->
+    <div class="modal fade" id="imageModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content" style="background: white; border: none; border-radius: 15px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.3);">
+                <div class="modal-header" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none; padding: 25px;">
+                    <h5 class="modal-title" id="modalTitle" style="color: white; font-weight: 700; font-size: 1.3rem;">🖼️ Hình ảnh sản phẩm</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" style="filter: brightness(0.9);"></button>
+                </div>
+                <div class="modal-body text-center" style="padding: 40px;">
+                    <img id="modalImage" src="" alt="Product Image" style="max-width: 100%; border-radius: 15px; box-shadow: 0 10px 40px rgba(0,0,0,0.15);">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal xem chi tiết sản phẩm -->
+    <div class="modal fade" id="detailModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content" style="background: white; border: none; border-radius: 15px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.3);">
+                <div class="modal-header" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none; padding: 25px;">
+                    <h5 class="modal-title" style="color: white; font-weight: 700; font-size: 1.3rem;">📋 Chi tiết sản phẩm</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" style="filter: brightness(0.9);"></button>
+                </div>
+                <div class="modal-body" style="padding: 35px;">
+                    <div class="row">
+                        <div class="col-md-5 text-center" style="margin-bottom: 20px;">
+                            <img id="detailImage" src="" alt="Product Image" style="max-width: 100%; border-radius: 15px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); margin-bottom: 15px;">
+                        </div>
+                        <div class="col-md-7">
+                            <h3 id="detailName" style="color: #222; font-weight: 800; margin-bottom: 15px; font-size: 1.5rem;"></h3>
+                            <div style="margin-bottom: 18px;">
+                                <span style="display: inline-block; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 7px 15px; border-radius: 25px; font-size: 0.85rem; font-weight: 700;" id="detailCategory"></span>
+                            </div>
+                            <div style="margin-bottom: 15px; padding: 16px; background: linear-gradient(135deg, #f8faff 0%, #f0f4ff 100%); border-radius: 12px; border-left: 4px solid #667eea;">
+                                <div style="color: #999; font-size: 0.85rem; margin-bottom: 6px; font-weight: 600;">🆔 ID Sản phẩm</div>
+                                <div style="color: #333; font-weight: 700; font-size: 1.1rem;" id="detailId"></div>
+                            </div>
+                            <div style="margin-bottom: 15px; padding: 16px; background: linear-gradient(135deg, #f8faff 0%, #f0f4ff 100%); border-radius: 12px; border-left: 4px solid #27ae60;">
+                                <div style="color: #999; font-size: 0.85rem; margin-bottom: 6px; font-weight: 600;">💰 Giá bán</div>
+                                <div style="font-size: 2rem; font-weight: 800; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;" id="detailPrice"></div>
+                            </div>
+                            <div style="margin-bottom: 20px; padding: 16px; background: linear-gradient(135deg, #f8faff 0%, #f0f4ff 100%); border-radius: 12px; border-left: 4px solid #667eea;">
+                                <div style="color: #999; font-size: 0.85rem; margin-bottom: 8px; font-weight: 600;">📝 Mô tả</div>
+                                <div style="color: #555; line-height: 1.7; font-size: 0.95rem;" id="detailDescription"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer" style="border-top: 1px solid #e8e8e8; padding: 20px 35px; background: #f9f9f9; gap: 10px;">
+                    <button type="button" class="btn" style="background: #e8e8e8; color: #333; border: none; padding: 10px 25px; border-radius: 10px; font-weight: 700; cursor: pointer; transition: all 0.3s;" data-bs-dismiss="modal" onmouseover="this.style.background='#d0d0d0'" onmouseout="this.style.background='#e8e8e8'">Đóng</button>
+                    <button type="button" class="btn" style="background: linear-gradient(135deg, #27ae60 0%, #229954 100%); color: white; border: none; padding: 10px 25px; border-radius: 10px; font-weight: 700; cursor: pointer; transition: all 0.3s; box-shadow: 0 4px 15px rgba(39, 174, 96, 0.25);" id="detailAddBtn" onmouseover="this.style.boxShadow='0 6px 20px rgba(39, 174, 96, 0.35); this.style.transform='translateY(-2px)'" onmouseout="this.style.boxShadow='0 4px 15px rgba(39, 174, 96, 0.25)'; this.style.transform='translateY(0)'">➕ Thêm vào giỏ</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal xác nhận xóa -->
+    <div class="modal fade" id="deleteModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content" style="background: white; border: none; border-radius: 15px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.3);">
+                <div class="modal-header" style="background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%); border: none; padding: 25px;">
+                    <h5 class="modal-title" style="color: white; font-weight: 700; font-size: 1.3rem;">⚠️ Xác nhận xóa</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" style="filter: brightness(0.9);"></button>
+                </div>
+                <div class="modal-body" style="padding: 40px; text-align: center;">
+                    <i class="fas fa-trash-alt" style="font-size: 4rem; color: #e74c3c; margin-bottom: 20px; display: block;"></i>
+                    <div style="font-size: 1.2rem; color: #333; font-weight: 700; margin-bottom: 12px;">Bạn chắc chắn muốn xóa?</div>
+                    <div style="color: #666; font-size: 0.95rem; line-height: 1.6;" id="deleteMessage"></div>
+                </div>
+                <div class="modal-footer" style="border-top: 1px solid #e8e8e8; padding: 20px 35px; background: #f9f9f9; gap: 10px;">
+                    <button type="button" class="btn" style="background: #e8e8e8; color: #333; border: none; padding: 10px 25px; border-radius: 10px; font-weight: 700; cursor: pointer; transition: all 0.3s;" data-bs-dismiss="modal" onmouseover="this.style.background='#d0d0d0'" onmouseout="this.style.background='#e8e8e8'">Hủy</button>
+                    <button type="button" class="btn" style="background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%); color: white; border: none; padding: 10px 25px; border-radius: 10px; font-weight: 700; cursor: pointer; transition: all 0.3s; box-shadow: 0 4px 15px rgba(231, 76, 60, 0.25);" id="confirmDeleteBtn" onmouseover="this.style.boxShadow='0 6px 20px rgba(231, 76, 60, 0.35)'; this.style.transform='translateY(-2px)'" onmouseout="this.style.boxShadow='0 4px 15px rgba(231, 76, 60, 0.25)'; this.style.transform='translateY(0)'">🗑️ Xóa ngay</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="main.js"></script>
+</body>
+</html>
